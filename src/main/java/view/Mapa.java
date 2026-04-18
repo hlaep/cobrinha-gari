@@ -2,20 +2,25 @@ package view;
 
 import model.Espaco;
 
-import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Dimension;
+import java.awt.Point;
+
+import javax.swing.JPanel;
 import java.util.Map;
+import java.util.List;
 
 public class Mapa extends JPanel {
     private final Espaco[][] mapa;
     private final int ESPACO_TAMANHO = 32;
     private final Map<String, Image> imagens;
+    private List<Point> corpoCobrinha;
 
-    public Mapa(Map<String, Image> imagens, Espaco[][] mapa) {
+    public Mapa(Map<String, Image> imagens, Espaco[][] mapa, List<Point> corpoCobrinha) {
         this.imagens = imagens;
         this.mapa = mapa;
+        this.corpoCobrinha = corpoCobrinha;
 
         int larguraTotal = 30 * ESPACO_TAMANHO;
         int alturaTotal = 30 * ESPACO_TAMANHO;
@@ -46,5 +51,16 @@ public class Mapa extends JPanel {
                 }
             }
         }
+
+        g.setColor(java.awt.Color.GREEN);
+        for(Point p: corpoCobrinha) {
+            g.fillRect(
+                    p.x * ESPACO_TAMANHO,
+                    p.y * ESPACO_TAMANHO,
+                    ESPACO_TAMANHO,
+                    ESPACO_TAMANHO
+            );
+        }
+
     }
 }

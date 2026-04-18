@@ -14,21 +14,21 @@ public class Tabuleiro {
                 mapa[i][j] = new Espaco("vazio");
             }
         }
-        gerarLixosIniciais();
+        gerarLixo();
     }
 
     private int aleatorizar(int max) {
         return ThreadLocalRandom.current().nextInt(0, max);
     }
 
-    private void gerarLixosIniciais() {
+    private void gerarLixo() {
+        int xSorteado = aleatorizar(DIMENSAO);
+        int ySorteado = aleatorizar(DIMENSAO);
+
         String[] tiposLixo = {"orgânico", "plástico", "papel", "vidro", "metal"};
-        for(int i = 0; i < 3; i++) {
-            int xSorteado = aleatorizar(DIMENSAO);
-            int ySorteado = aleatorizar(DIMENSAO);
-            String tipoSorteado = tiposLixo[aleatorizar(tiposLixo.length)];
-            mapa[xSorteado][ySorteado].setTipo(tipoSorteado);
-        }
+        String tipoSorteado = tiposLixo[aleatorizar(tiposLixo.length)];
+
+        mapa[xSorteado][ySorteado].setTipo(tipoSorteado);
     }
 
     public Espaco[][] getMapa() {
