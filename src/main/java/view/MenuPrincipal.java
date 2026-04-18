@@ -4,8 +4,10 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
+
 import java.awt.Dimension;
 import java.awt.Component;
+import java.awt.Image;
 
 public class MenuPrincipal extends PainelComFundo {
     // Botões //
@@ -43,8 +45,8 @@ public class MenuPrincipal extends PainelComFundo {
         }
     }
 
-    public MenuPrincipal() {
-        super("/menuInicial.png");
+    public MenuPrincipal(Image img) {
+        super(img);
         this.criarBotoes();
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }

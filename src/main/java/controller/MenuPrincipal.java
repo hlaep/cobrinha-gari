@@ -1,7 +1,6 @@
 package controller;
 
 import view.Janela;
-import view.CarregadorDeImagem;
 import view.Jogo;
 import view.Mapa;
 
@@ -17,7 +16,7 @@ public class MenuPrincipal implements view.MenuPrincipal.MenuListener {
 
     public MenuPrincipal() {
         this.tabuleiro = new Tabuleiro();
-        this.menuPrincipal = new view.MenuPrincipal();
+        this.menuPrincipal = new view.MenuPrincipal(Carregar.getImagem("/menuInicial.png"));
         this.janelaPrincipal = new Janela(this.menuPrincipal);
         janelaPrincipal.setVisible(true);
 
@@ -29,12 +28,12 @@ public class MenuPrincipal implements view.MenuPrincipal.MenuListener {
 
     private Map<String, Image> carregarRecursosMapa() {
         return Map.of(
-                "vazio", CarregadorDeImagem.getImagem("/terreno-vazio.png"),
-                "vidro", CarregadorDeImagem.getImagem("/lixo-vidro.png"),
-                "plástico", CarregadorDeImagem.getImagem("/lixo-plastico.png"),
-                "papel", CarregadorDeImagem.getImagem("/lixo-papel.png"),
-                "metal", CarregadorDeImagem.getImagem("/lixo-metal.png"),
-                "orgânico", CarregadorDeImagem.getImagem("/lixo-organico.png")
+                "vazio", Carregar.getImagem("/terreno-vazio.png"),
+                "vidro", Carregar.getImagem("/lixo-vidro.png"),
+                "plástico", Carregar.getImagem("/lixo-plastico.png"),
+                "papel", Carregar.getImagem("/lixo-papel.png"),
+                "metal", Carregar.getImagem("/lixo-metal.png"),
+                "orgânico", Carregar.getImagem("/lixo-organico.png")
         );
     }
 

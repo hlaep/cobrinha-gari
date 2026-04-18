@@ -6,9 +6,8 @@ import java.awt.Graphics;
 
 public class PainelComFundo extends JPanel {
     final private Image imagemFundo;
-    public PainelComFundo(String caminho) {
-        this.imagemFundo = CarregadorDeImagem.getImagem(caminho, 400);
-        System.out.println(this.imagemFundo);
+    public PainelComFundo(Image img) {
+        this.imagemFundo = img;
     }
     @Override
     protected void paintComponent(Graphics g) {

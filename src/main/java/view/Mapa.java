@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Mapa extends JPanel {
     private final Espaco[][] mapa;
-    private final int ESPACO_TAMANHO = 20;
+    private final int ESPACO_TAMANHO = 32;
     private final Map<String, Image> imagens;
 
     public Mapa(Map<String, Image> imagens, Espaco[][] mapa) {

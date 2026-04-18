@@ -1,13 +1,13 @@
-package view;
+package controller;
 
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 
-public class CarregadorDeImagem {
+public class Carregar {
     public static Image getImagem(String caminho) {
-        URL imgURL = CarregadorDeImagem.class.getResource(caminho);
+        URL imgURL = Carregar.class.getResource(caminho);
 
         if (imgURL == null) {
             System.err.println("Recurso não encontrado: " + caminho);
