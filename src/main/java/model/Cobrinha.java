@@ -26,6 +26,14 @@ public class Cobrinha {
         tamanho = n;
     }
 
+    public String getDirecao() {
+        return direcao;
+    }
+
+    public void setDirecao(String direcao) {
+        this.direcao = direcao;
+    }
+
     public void crescer() {
         tamanho++;
     }
