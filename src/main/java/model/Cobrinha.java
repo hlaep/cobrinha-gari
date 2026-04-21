@@ -1,5 +1,7 @@
 package model;
 
+import controller.Direcao;
+
 import java.awt.Point;
 
 import java.util.ArrayList;
@@ -7,9 +9,9 @@ import java.util.List;
 
 
 public class Cobrinha {
-    private String direcao = "leste";
+    private Direcao direcao = Direcao.LESTE;
     private String bucho = "vazio";
-    private int tamanho = 2; // Tamanho Inicial
+    private int tamanho = 20; // Tamanho Inicial
     private List<Point> corpo;
 
     public Cobrinha() {
@@ -26,11 +28,11 @@ public class Cobrinha {
         tamanho = n;
     }
 
-    public String getDirecao() {
+    public Direcao getDirecao() {
         return direcao;
     }
 
-    public void setDirecao(String direcao) {
+    public void setDirecao(Direcao direcao) {
         this.direcao = direcao;
     }
 
@@ -47,10 +49,10 @@ public class Cobrinha {
         int novaPosicaoY = corpo.getFirst().y;
 
         switch(direcao) {
-            case "norte" -> novaPosicaoY--;
-            case "sul"   -> novaPosicaoY++;
-            case "leste" -> novaPosicaoX++;
-            case "oeste" -> novaPosicaoX--;
+            case NORTE -> novaPosicaoY--;
+            case SUL   -> novaPosicaoY++;
+            case LESTE -> novaPosicaoX++;
+            case OESTE -> novaPosicaoX--;
         }
 
         corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));
