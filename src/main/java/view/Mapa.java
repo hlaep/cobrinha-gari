@@ -1,6 +1,8 @@
 package view;
 
+import controller.Direcao;
 import model.Espaco;
+import model.Cobrinha;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -15,15 +17,16 @@ public class Mapa extends JPanel {
     private final Espaco[][] mapa;
     private final int ESPACO_TAMANHO = 32;
     private final Map<String, Image> imagens;
-    private List<Point> corpoCobrinha;
+    private Cobrinha cobrinha;
 
-    public Mapa(Map<String, Image> imagens, Espaco[][] mapa, List<Point> corpoCobrinha) {
+
+    public Mapa(Map<String, Image> imagens, Espaco[][] mapa, Cobrinha cobrinha) {
         this.imagens = imagens;
         this.mapa = mapa;
-        this.corpoCobrinha = corpoCobrinha;
+        this.cobrinha = cobrinha;
 
-        int larguraTotal = 30 * ESPACO_TAMANHO;
-        int alturaTotal = 30 * ESPACO_TAMANHO;
+        int larguraTotal = mapa[0].length * ESPACO_TAMANHO;
+        int alturaTotal = mapa.length * ESPACO_TAMANHO;
 
         this.setPreferredSize(new Dimension(larguraTotal, alturaTotal));
     }
@@ -52,15 +55,22 @@ public class Mapa extends JPanel {
             }
         }
 
-        g.setColor(java.awt.Color.GREEN);
-        for(Point p: corpoCobrinha) {
-            g.fillRect(
-                    p.x * ESPACO_TAMANHO,
-                    p.y * ESPACO_TAMANHO,
-                    ESPACO_TAMANHO,
-                    ESPACO_TAMANHO
-            );
-        }
+        Direcao direcaoAtual = cobrinha.getDirecao();
+        List<Point> corpo = cobrinha.getCorpo();
 
+        for(int i = 0; i < corpo.size(); i++) {
+            Image img;
+            Point ponto = corpo.get(i);
+            if(i == 0) img = direcaoAtual.getArteCabeca(imagens);
+             else if (i == corpo.size() - 1) img = direcaoAtual.getArteRabo(imagens);
+             else img = direcaoAtual.getArteCorpo(imagens);
+
+             g.drawImage(img, ponto.x * ESPACO_TAMANHO,
+                     ponto.y * ESPACO_TAMANHO,
+                     ESPACO_TAMANHO,
+                     ESPACO_TAMANHO,
+                     this
+             );
+        }
     }
 }
