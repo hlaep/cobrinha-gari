@@ -2,8 +2,8 @@ package view;
 
 import javax.swing.JPanel;
 
-public class Jogo extends JPanel {
-    public Jogo(Mapa mapa) {
+public class JogoView extends JPanel {
+    public JogoView(Mapa mapa) {
         this.add(mapa);
     }
 }

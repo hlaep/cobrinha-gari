@@ -11,7 +11,7 @@ public class Tabuleiro {
 
         for (int i = 0; i < DIMENSAO; i++) {
             for (int j = 0; j < DIMENSAO; j++) {
-                mapa[i][j] = new Espaco("vazio");
+                mapa[i][j] = new Espaco(Item.NENHUM);
             }
         }
         gerarLixo();
@@ -25,13 +25,18 @@ public class Tabuleiro {
         int xSorteado = aleatorizar(DIMENSAO);
         int ySorteado = aleatorizar(DIMENSAO);
 
-        String[] tiposLixo = {"orgânico", "plástico", "papel", "vidro", "metal"};
-        String tipoSorteado = tiposLixo[aleatorizar(tiposLixo.length)];
+        Item[] lixos = Item.getLixos();
+        Item lixoSorteado = lixos[aleatorizar(lixos.length)];
 
-        mapa[xSorteado][ySorteado].setTipo(tipoSorteado);
+        mapa[ySorteado][xSorteado].setTipo(lixoSorteado);
     }
 
     public Espaco[][] getMapa() {
+        // A primeira é o y e a segunda é o x mapa[y][x] //
         return mapa;
+    }
+
+    public int getDIMENSAO() {
+        return DIMENSAO;
     }
 }
