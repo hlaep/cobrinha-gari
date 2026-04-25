@@ -1,23 +1,52 @@
 package controller;
 
+import model.*;
+
+import view.JogoView;
 import view.Mapa;
 import view.Janela;
 
-import model.Tabuleiro;
-import model.Cobrinha;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Jogo {
     private final Tabuleiro tabuleiro;
     private final Cobrinha cobrinha;
-    private Mapa mapa;
+    private Mapa mapaView;
     private Janela janela;
 
+    public Jogo() {
+        this.tabuleiro = new Tabuleiro();
+        this.cobrinha = new Cobrinha();
+    }
+
+    public void iniciar(Janela janelaPrincipal ) {
+        this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
+        this.janela = janelaPrincipal;
+        janela.setConteudo(new JogoView(mapaView));
+
+        iniciarMovimento();
+        detectarTeclado();
+    }
+
+    public void iniciarMovimento() {
+        Timer timer = new Timer(150, _ -> {
+            cobrinha.andar(tabuleiro.getDIMENSAO());
+            verificarTerreno();
+            mapaView.repaint();
+        });
+        timer.start();
+    }
+
+    private void verificarTerreno() {
+        Point cabeca = cobrinha.getCorpo().getFirst();
+        Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
+
+        cobrinha.tentarEngolir(espaco);
+
+    }
 
     private void detectarTeclado() {
         janela.addKeyListener(new KeyAdapter() {
@@ -40,33 +69,10 @@ public class Jogo {
         Direcao atual = cobrinha.getDirecao();
         if (!atual.ehOposta(novaDirecao)) {
             cobrinha.setDirecao(novaDirecao);
-            mapa.repaint();
+            mapaView.repaint();
         }
     }
 
-    public void iniciarMovimento() {
-        Timer timer = new Timer(150, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cobrinha.andar();
-                mapa.repaint();
-            }
-        });
-        timer.start();
-    }
 
-    public Jogo() {
-        this.tabuleiro = new Tabuleiro();
-        this.cobrinha = new Cobrinha();
-    }
-
-    public void iniciar(Janela janelaPrincipal ) {
-        this.mapa = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
-        this.janela = janelaPrincipal;
-        janela.setConteudo(new view.Jogo(mapa));
-
-        iniciarMovimento();
-        detectarTeclado();
-    }
 
 }

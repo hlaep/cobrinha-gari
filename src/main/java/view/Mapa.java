@@ -1,8 +1,8 @@
 package view;
 
-import controller.Direcao;
 import model.Espaco;
 import model.Cobrinha;
+import model.Item;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,7 +11,6 @@ import java.awt.Point;
 
 import javax.swing.JPanel;
 import java.util.Map;
-import java.util.List;
 
 public class Mapa extends JPanel {
     private final Espaco[][] mapa;
@@ -37,7 +36,7 @@ public class Mapa extends JPanel {
 
         for(int i = 0; i < mapa.length; i++) {
             for(int j = 0; j < mapa[i].length; j++) {
-                String tipo = mapa[i][j].getTipo();
+                String tipo = mapa[i][j].getTipo().getNome();
                 Image img = imagens.get(tipo);
 
                 if(img != null) {
@@ -55,7 +54,17 @@ public class Mapa extends JPanel {
             }
         }
 
-        Direcao direcaoAtual = cobrinha.getDirecao();
+        g.setColor(java.awt.Color.GREEN);
+        for(Point p: cobrinha.getCorpo()) {
+            g.fillRect(
+                    p.x * ESPACO_TAMANHO,
+                    p.y * ESPACO_TAMANHO,
+                    ESPACO_TAMANHO,
+                    ESPACO_TAMANHO
+            );
+        }
+
+       /* Direcao direcaoAtual = cobrinha.getDirecao();
         List<Point> corpo = cobrinha.getCorpo();
 
         for(int i = 0; i < corpo.size(); i++) {
@@ -71,6 +80,6 @@ public class Mapa extends JPanel {
                      ESPACO_TAMANHO,
                      this
              );
-        }
+        }*/
     }
 }

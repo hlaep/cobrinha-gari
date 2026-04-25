@@ -1,17 +1,17 @@
 package model;
 
 public class Espaco {
-    private String tipo;
+    private Item tipo;
 
-    public Espaco(String tipo) {
+    public Espaco(Item tipo) {
         this.tipo = tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(Item tipo) {
         this.tipo = tipo;
     }
 
-    public String getTipo() {
+    public Item getTipo() {
         return tipo;
     }
 }
