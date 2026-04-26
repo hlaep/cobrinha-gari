@@ -11,9 +11,111 @@ public class Tabuleiro {
 
         for (int i = 0; i < DIMENSAO; i++) {
             for (int j = 0; j < DIMENSAO; j++) {
-                mapa[i][j] = new Espaco(Item.NENHUM);
+
+                if(i == 0 || i == DIMENSAO - 1 ) {
+                        mapa[i][j] = new Espaco(EspacoTipo.ARBUSTO);
+                } else {
+                    mapa[i][j] = new Espaco(EspacoTipo.ESPACO_VAZIO);
+                }
+
             }
         }
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
+        gerarLixo();
         gerarLixo();
     }
 
@@ -25,10 +127,10 @@ public class Tabuleiro {
         int xSorteado = aleatorizar(DIMENSAO);
         int ySorteado = aleatorizar(DIMENSAO);
 
-        Item[] lixos = Item.getLixos();
-        Item lixoSorteado = lixos[aleatorizar(lixos.length)];
+        Coletavel[] lixos = Coletavel.getLixos();
+        Coletavel lixoSorteado = lixos[aleatorizar(lixos.length)];
 
-        mapa[ySorteado][xSorteado].setTipo(lixoSorteado);
+       mapa[ySorteado][xSorteado].setColetavel(lixoSorteado);
     }
 
     public Espaco[][] getMapa() {

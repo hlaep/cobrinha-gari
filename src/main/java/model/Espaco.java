@@ -1,17 +1,27 @@
 package model;
 
 public class Espaco {
-    private Item tipo;
+    private final EspacoTipo tipo;
+    private Coletavel coletavel; // Pode ser Coletavel.NENHUM
 
-    public Espaco(Item tipo) {
+    public Espaco(EspacoTipo tipo) {
         this.tipo = tipo;
+        this.coletavel = Coletavel.NENHUM;
     }
 
-    public void setTipo(Item tipo) {
-        this.tipo = tipo;
-    }
 
-    public Item getTipo() {
+    // public boolean podeCaminhar() {return this.tipo != EspacoTipo.ARBUSTO && this.tipo != EspacoTipo.PAREDE;}
+
+    public EspacoTipo getTipo() {
         return tipo;
     }
+
+    public Coletavel getColetavel() {
+        return coletavel;
+    }
+
+    public void setColetavel(Coletavel c) {
+        coletavel = c;
+    }
+
 }

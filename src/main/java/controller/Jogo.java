@@ -43,7 +43,6 @@ public class Jogo {
     private void verificarTerreno() {
         Point cabeca = cobrinha.getCorpo().getFirst();
         Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
-
         cobrinha.tentarEngolir(espaco);
 
     }

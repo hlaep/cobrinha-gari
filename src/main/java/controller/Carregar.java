@@ -1,5 +1,7 @@
 package controller;
 
+import model.EspacoTipo;
+
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.io.IOException;
@@ -46,13 +48,17 @@ public class Carregar {
     public static Map<String, Image> getArtes() {
         Map<String, Image> artes = new HashMap<>();
 
-        artes.put("metal", getImagem("/lixo-metal.png"));
-        artes.put("orgânico", getImagem("/lixo-organico.png"));
-        artes.put("papel", getImagem("/lixo-papel.png"));
-        artes.put("vidro", getImagem("/lixo-vidro.png"));
-        artes.put("plástico", getImagem("/lixo-plastico.png"));
+        EspacoTipo[] espacoTipos = EspacoTipo.values();
+        for(EspacoTipo tipo: espacoTipos) {
+            String chave = tipo.getChaveString();
+            artes.put(chave, getImagem("/" + chave + ".png"));
+        }
 
-        artes.put("vazio", getImagem("/espaco-vazio.png"));
+        artes.put("lixo metal", getImagem("/lixo-metal.png"));
+        artes.put("lixo orgânico", getImagem("/lixo-organico.png"));
+        artes.put("lixo papel", getImagem("/lixo-papel.png"));
+        artes.put("lixo vidro", getImagem("/lixo-vidro.png"));
+        artes.put("lixo plástico", getImagem("/lixo-plastico.png"));
         artes.put("maçã", getImagem("/espaco-maca.png"));
         artes.put("bomba", getImagem("/espaco-bomba.png"));
 

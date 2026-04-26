@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Cobrinha {
     private Direcao direcao = Direcao.LESTE;
-    private Item bucho = Item.NENHUM;
+    private Coletavel bucho = Coletavel.NENHUM;
     private int tamanho = 20; // Tamanho Inicial
     private List<Point> corpo;
 
@@ -39,13 +39,13 @@ public class Cobrinha {
     }
 
     public void tentarEngolir(Espaco espaco) {
-        Item itemNovo = espaco.getTipo();
-        if(bucho == Item.NENHUM && itemNovo != Item.NENHUM) {
-            if(itemNovo.ehLixo()) {
-                bucho = itemNovo;
+        Coletavel coletavelNovo = espaco.getColetavel();
+        if(bucho == Coletavel.NENHUM && coletavelNovo != Coletavel.NENHUM) {
+            if(coletavelNovo.ehLixo()) {
+                bucho = coletavelNovo;
 
             }
-            espaco.setTipo(Item.NENHUM);
+            espaco.setColetavel(Coletavel.NENHUM);
         }
     }
 

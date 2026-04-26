@@ -1,8 +1,9 @@
 package view;
 
+import model.Coletavel;
 import model.Espaco;
+import model.EspacoTipo;
 import model.Cobrinha;
-import model.Item;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,7 +17,7 @@ public class Mapa extends JPanel {
     private final Espaco[][] mapa;
     private final int ESPACO_TAMANHO = 32;
     private final Map<String, Image> imagens;
-    private Cobrinha cobrinha;
+    private final Cobrinha cobrinha;
 
 
     public Mapa(Map<String, Image> imagens, Espaco[][] mapa, Cobrinha cobrinha) {
@@ -36,8 +37,18 @@ public class Mapa extends JPanel {
 
         for(int i = 0; i < mapa.length; i++) {
             for(int j = 0; j < mapa[i].length; j++) {
-                String tipo = mapa[i][j].getTipo().getNome();
-                Image img = imagens.get(tipo);
+
+                Espaco espaco = mapa[i][j];
+                Image img;
+                if(espaco.getColetavel() == Coletavel.NENHUM) {
+                    // Renderiza com base na arte do espaco //
+                    String arteEspaco = espaco.getTipo().getChaveString();
+                    img = imagens.get(arteEspaco);
+                } else {
+                    // Renderiza com base na arte do coletável (que contém a arte do espaco vazio de fundo) //
+                    String arteColetavel = espaco.getColetavel().getChaveString();
+                    img = imagens.get(arteColetavel);
+                }
 
                 if(img != null) {
                     // Parâmetros: g.drawImage(imagem, x, y, largura, altura, observer)
