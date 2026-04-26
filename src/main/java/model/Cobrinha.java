@@ -10,11 +10,13 @@ public class Cobrinha {
     private Coletavel bucho = Coletavel.NENHUM;
     private int tamanho = 2; // Tamanho Inicial
     private final List<Point> corpo;
+    private final Tabuleiro tabuleiro;
 
-    public Cobrinha() {
+    public Cobrinha(Tabuleiro tabuleiro) {
         corpo = new ArrayList<>();
         corpo.add(new Point(15,15));
         corpo.add(new Point(15,16));
+        this.tabuleiro = tabuleiro;
     }
 
     public List<Point> getCorpo() {
@@ -37,7 +39,10 @@ public class Cobrinha {
         tamanho++;
     }
 
-    public void tentarEngolir(Espaco espaco) {
+    public void tentarEngolir() {
+        Point cabeca = corpo.getFirst();
+        Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
+
         Coletavel coletavelNovo = espaco.getColetavel();
         if(bucho == Coletavel.NENHUM && coletavelNovo != Coletavel.NENHUM) {
             if(coletavelNovo.ehLixo()) {
@@ -65,7 +70,7 @@ public class Cobrinha {
 
         Point proximoPonto = new Point(novaPosicaoX, novaPosicaoY);
 
-        if(!colideComCorpo(proximoPonto)) {
+        if(!colideComCorpo(proximoPonto) && !colideComObjeto(proximoPonto)) {
             // Não colide com o corpo //
             andar(novaPosicaoX, novaPosicaoY);
         } else {
@@ -80,6 +85,11 @@ public class Cobrinha {
             }
         }
         return false;
+    }
+
+    private boolean colideComObjeto(Point proximoPonto) {
+        Espaco espacoAFrente = tabuleiro.getMapa()[proximoPonto.y][proximoPonto.x];
+        return espacoAFrente.getTipo().ehIntransitavel();
     }
 
     private void andar(int novaPosicaoX, int novaPosicaoY) {

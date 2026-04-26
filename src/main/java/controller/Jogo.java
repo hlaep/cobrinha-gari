@@ -18,8 +18,8 @@ public class Jogo {
     private Janela janela;
 
     public Jogo() {
-        this.tabuleiro = new Tabuleiro();
-        this.cobrinha = new Cobrinha();
+        tabuleiro = new Tabuleiro();
+        cobrinha = new Cobrinha(tabuleiro);
     }
 
     public void iniciar(Janela janelaPrincipal ) {
@@ -34,17 +34,10 @@ public class Jogo {
     public void iniciarMovimento() {
         Timer timer = new Timer(150, _ -> {
             cobrinha.tentarAndar(tabuleiro.getDIMENSAO());
-            verificarTerreno();
+            cobrinha.tentarEngolir();
             mapaView.repaint();
         });
         timer.start();
-    }
-
-    private void verificarTerreno() {
-        Point cabeca = cobrinha.getCorpo().getFirst();
-        Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
-        cobrinha.tentarEngolir(espaco);
-
     }
 
     private void detectarTeclado() {

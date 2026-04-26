@@ -18,4 +18,8 @@ public enum EspacoTipo {
     public String getChaveString() {
         return chaveString;
     }
+
+    public boolean ehIntransitavel() {
+        return this != ESPACO_VAZIO;
+    }
 }
