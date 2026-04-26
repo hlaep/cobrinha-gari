@@ -33,7 +33,7 @@ public class Jogo {
 
     public void iniciarMovimento() {
         Timer timer = new Timer(150, _ -> {
-            cobrinha.andar(tabuleiro.getDIMENSAO());
+            cobrinha.tentarAndar(tabuleiro.getDIMENSAO());
             verificarTerreno();
             mapaView.repaint();
         });
