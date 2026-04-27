@@ -10,19 +10,39 @@ public class Tabuleiro {
         mapa = new Espaco[DIMENSAO][DIMENSAO];
 
         for (int i = 0; i < DIMENSAO; i++) {
-
             for (int j = 0; j < DIMENSAO; j++) {
-
-                if(i == 0 || i == DIMENSAO - 1 || j == 0 || j == DIMENSAO - 1) {
+                if(i == 0 || i == DIMENSAO - 1 || j == 0) {
+                        // Põe arbustos nas bordas //
                         mapa[i][j] = new Espaco(EspacoTipo.ARBUSTO);
                 } else {
+                    // Espaço normal //
                     mapa[i][j] = new Espaco(EspacoTipo.ESPACO_VAZIO);
                 }
-
             }
-
         }
+        renderizarColunaLixeiras();
         gerarLixo();
+    }
+
+    private void renderizarColunaLixeiras() {
+        int colunaCoordenada = DIMENSAO - 1; // Última //
+        for(int i = 1; i < DIMENSAO - 1; i++) {
+            // Preenche com arbusto entre a sengunda e a penúltima (dimensão - 1) //
+            mapa[i][colunaCoordenada] = new Espaco(EspacoTipo.ARBUSTO);
+        }
+
+        EspacoTipo[] lixeiras = EspacoTipo.getLixeiras();
+
+        int linhaAtual = 1;
+        for(EspacoTipo tipo: lixeiras) {
+            mapa[linhaAtual][colunaCoordenada] = new Espaco(tipo);
+            // Espaço vazio para a cobrinha conseguir passar e entregar o lixo //
+            mapa[linhaAtual + 1][colunaCoordenada] = new Espaco(EspacoTipo.ESPACO_VAZIO);
+            // Abertura para a cobrinha conseguir teleportar para o outro lado //
+            mapa[linhaAtual + 1][0] = new Espaco(EspacoTipo.ESPACO_VAZIO);
+            // +3 (lixeira, espaço de entrega e arbusto separando) //
+            linhaAtual += 3;
+        }
     }
 
     private int aleatorizar(int max) {

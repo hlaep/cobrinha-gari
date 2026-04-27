@@ -22,4 +22,8 @@ public enum EspacoTipo {
     public boolean ehIntransitavel() {
         return this != ESPACO_VAZIO;
     }
+
+    public static EspacoTipo[] getLixeiras() {
+        return new EspacoTipo[] {LIXEIRA_METAL, LIXEIRA_PAPEL, LIXEIRA_PLASTICO, LIXEIRA_VIDRO, LIXEIRA_ORGANICO};
+    }
 }
