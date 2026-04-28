@@ -70,12 +70,29 @@ public class Cobrinha {
 
         Point proximoPonto = new Point(novaPosicaoX, novaPosicaoY);
 
-        if(!colideComCorpo(proximoPonto) && !colideComObjeto(proximoPonto)) {
+        // Informações necessárias para ehPontoDeEntrega() e entregarLixo() //
+        Point pontoAtual = corpo.getFirst();
+        Espaco espacoAtual = tabuleiro.getMapa()[pontoAtual.y][pontoAtual.x];
+
+        if(colideComCorpo(proximoPonto) || colideComObjeto(proximoPonto)) {
+            // Colide e perde //
+
+        } else if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) {
+            entregarLixo(espacoAtual);
+            andar(novaPosicaoX, novaPosicaoY);
+        }else {
             // Não colide com o corpo //
             andar(novaPosicaoX, novaPosicaoY);
-        } else {
-            // Colide e perde //
         }
+    }
+
+    private boolean estaFora(int valor, int maximo) {
+        return valor < 0 || valor >= maximo; // entre 0 e máximo //
+    }
+
+    private int teleportar(int valor, int maximo) {
+        if(valor < 0) return maximo - 1;
+        else return 0;
     }
 
     private boolean colideComCorpo(Point proximoPonto) {
@@ -92,18 +109,31 @@ public class Cobrinha {
         return espacoAFrente.getTipo().ehIntransitavel();
     }
 
+    private boolean ehPontoDeEntrega(Espaco espacoAtual) {
+        return espacoAtual.getTipo() == EspacoTipo.PONTO_ENTREGA;
+    }
+
+    private void entregarLixo(Espaco lixeira) {
+        boolean entregaEstaCerta = lixeira.verificarSeAceitaEntrega(bucho);
+
+        if(entregaEstaCerta) {
+            IO.println("Entregou certo.");
+            tabuleiro.gerarLixo();
+
+        } else {
+            IO.println("Entregou errado.");
+            tabuleiro.gerarLixo();
+        }
+        bucho = Coletavel.NENHUM;
+    }
+
+
+
     private void andar(int novaPosicaoX, int novaPosicaoY) {
         corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));
         if(corpo.size() > tamanho) {
             corpo.removeLast();
         }
     }
-    private boolean estaFora(int valor, int maximo) {
-        return valor < 0 || valor >= maximo; // entre 0 e máximo //
-    }
 
-    private int teleportar(int valor, int maximo) {
-        if(valor < 0) return maximo - 1;
-        else return 0;
-    }
 }

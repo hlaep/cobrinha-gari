@@ -34,10 +34,12 @@ public class Tabuleiro {
         EspacoTipo[] lixeiras = EspacoTipo.getLixeiras();
 
         int linhaAtual = 1;
-        for(EspacoTipo tipo: lixeiras) {
-            mapa[linhaAtual][colunaCoordenada] = new Espaco(tipo);
+        for(EspacoTipo tipoLixeira: lixeiras) {
+            mapa[linhaAtual][colunaCoordenada] = new Espaco(tipoLixeira);
+            Coletavel lixoEquivalente = tipoLixeira.getColetavelEquivalente();
             // Espaço vazio para a cobrinha conseguir passar e entregar o lixo //
-            mapa[linhaAtual + 1][colunaCoordenada] = new Espaco(EspacoTipo.ESPACO_VAZIO);
+            mapa[linhaAtual + 1][colunaCoordenada] = new Espaco(EspacoTipo.PONTO_ENTREGA);
+            mapa[linhaAtual + 1][colunaCoordenada].setAceitaEntrega(lixoEquivalente);
             // Abertura para a cobrinha conseguir teleportar para o outro lado //
             mapa[linhaAtual + 1][0] = new Espaco(EspacoTipo.ESPACO_VAZIO);
             // +3 (lixeira, espaço de entrega e arbusto separando) //
@@ -49,7 +51,7 @@ public class Tabuleiro {
         return ThreadLocalRandom.current().nextInt(0, max);
     }
 
-    private void gerarLixo() {
+    public void gerarLixo() {
         Espaco espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
 
         while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO) {

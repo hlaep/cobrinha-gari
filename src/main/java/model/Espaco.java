@@ -2,15 +2,14 @@ package model;
 
 public class Espaco {
     private final EspacoTipo tipo;
-    private Coletavel coletavel; // Pode ser Coletavel.NENHUM
+    private Coletavel coletavel; // Se for espaço vazio é nenhum //
+    private Coletavel aceitaEntrega;  // Se não for ponto de entrega é nenhum //
 
     public Espaco(EspacoTipo tipo) {
         this.tipo = tipo;
         this.coletavel = Coletavel.NENHUM;
+        this.aceitaEntrega = Coletavel.NENHUM;
     }
-
-
-    // public boolean podeCaminhar() {return this.tipo != EspacoTipo.ARBUSTO && this.tipo != EspacoTipo.PAREDE;}
 
     public EspacoTipo getTipo() {
         return tipo;
@@ -20,8 +19,15 @@ public class Espaco {
         return coletavel;
     }
 
-    public void setColetavel(Coletavel c) {
-        coletavel = c;
+    public void setColetavel(Coletavel novoColetavel) {
+        if(tipo == EspacoTipo.ESPACO_VAZIO) coletavel = novoColetavel;
     }
 
+    public void setAceitaEntrega(Coletavel tipoDeEntrega) {
+        if(tipo == EspacoTipo.PONTO_ENTREGA) aceitaEntrega = tipoDeEntrega;
+    }
+
+    public boolean verificarSeAceitaEntrega(Coletavel lixo) {
+        return lixo == aceitaEntrega;
+    }
 }
