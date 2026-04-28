@@ -5,17 +5,18 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Cobrinha {
     private Direcao direcao = Direcao.LESTE;
-    private Item bucho = Item.NENHUM;
-    private int tamanho = 20; // Tamanho Inicial
-    private List<Point> corpo;
+    private Coletavel bucho = Coletavel.NENHUM;
+    private int tamanho = 2; // Tamanho Inicial
+    private final List<Point> corpo;
+    private final Tabuleiro tabuleiro;
 
-    public Cobrinha() {
+    public Cobrinha(Tabuleiro tabuleiro) {
         corpo = new ArrayList<>();
         corpo.add(new Point(15,15));
         corpo.add(new Point(15,16));
+        this.tabuleiro = tabuleiro;
     }
 
     public List<Point> getCorpo() {
@@ -38,38 +39,50 @@ public class Cobrinha {
         tamanho++;
     }
 
-    public void tentarEngolir(Espaco espaco) {
-        Item itemNovo = espaco.getTipo();
-        if(bucho == Item.NENHUM && itemNovo != Item.NENHUM) {
-            if(itemNovo.ehLixo()) {
-                bucho = itemNovo;
+    public void tentarEngolir() {
+        Point cabeca = corpo.getFirst();
+        Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
+
+        Coletavel coletavelNovo = espaco.getColetavel();
+        if(bucho == Coletavel.NENHUM && coletavelNovo != Coletavel.NENHUM) {
+            if(coletavelNovo.ehLixo()) {
+                bucho = coletavelNovo;
 
             }
-            espaco.setTipo(Item.NENHUM);
+            espaco.setColetavel(Coletavel.NENHUM);
         }
     }
 
-    public void andar(int limiteXYMapa) {
+    public void tentarAndar(int limiteXYMapa) {
         int novaPosicaoX = corpo.getFirst().x;
         int novaPosicaoY = corpo.getFirst().y;
 
         switch(direcao) {
-            case NORTE: novaPosicaoY--; break;
-            case SUL:   novaPosicaoY++; break;
-            case LESTE: novaPosicaoX++; break;
-            case OESTE: novaPosicaoX--; break;
+            case NORTE -> novaPosicaoY--;
+            case SUL -> novaPosicaoY++;
+            case LESTE -> novaPosicaoX++;
+            case OESTE -> novaPosicaoX--;
         }
 
-        if(estaFora(novaPosicaoX, limiteXYMapa)) {
-            novaPosicaoX = teleportar(novaPosicaoX, limiteXYMapa);
-        }
-        if(estaFora(novaPosicaoY, limiteXYMapa)) {
-            novaPosicaoY = teleportar(novaPosicaoY, limiteXYMapa);
-        }
+        // Nova posição teleporta para o outro lado se sair do mapa //
+        if(estaFora(novaPosicaoX, limiteXYMapa)) novaPosicaoX = teleportar(novaPosicaoX, limiteXYMapa);
+        if(estaFora(novaPosicaoY, limiteXYMapa)) novaPosicaoY = teleportar(novaPosicaoY, limiteXYMapa);
 
-        corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));
-        if(corpo.size() > tamanho) {
-            corpo.removeLast();
+        Point proximoPonto = new Point(novaPosicaoX, novaPosicaoY);
+
+        // Informações necessárias para ehPontoDeEntrega() e entregarLixo() //
+        Point pontoAtual = corpo.getFirst();
+        Espaco espacoAtual = tabuleiro.getMapa()[pontoAtual.y][pontoAtual.x];
+
+        if(colideComCorpo(proximoPonto) || colideComObjeto(proximoPonto)) {
+            // Colide e perde //
+
+        } else if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) {
+            entregarLixo(espacoAtual);
+            andar(novaPosicaoX, novaPosicaoY);
+        }else {
+            // Não colide com o corpo //
+            andar(novaPosicaoX, novaPosicaoY);
         }
     }
 
@@ -81,4 +94,46 @@ public class Cobrinha {
         if(valor < 0) return maximo - 1;
         else return 0;
     }
+
+    private boolean colideComCorpo(Point proximoPonto) {
+        for(Point parteDoCorpo : corpo) {
+            if(proximoPonto.equals(parteDoCorpo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean colideComObjeto(Point proximoPonto) {
+        Espaco espacoAFrente = tabuleiro.getMapa()[proximoPonto.y][proximoPonto.x];
+        return espacoAFrente.getTipo().ehIntransitavel();
+    }
+
+    private boolean ehPontoDeEntrega(Espaco espacoAtual) {
+        return espacoAtual.getTipo() == EspacoTipo.PONTO_ENTREGA;
+    }
+
+    private void entregarLixo(Espaco lixeira) {
+        boolean entregaEstaCerta = lixeira.verificarSeAceitaEntrega(bucho);
+
+        if(entregaEstaCerta) {
+            IO.println("Entregou certo.");
+            tabuleiro.gerarLixo();
+
+        } else {
+            IO.println("Entregou errado.");
+            tabuleiro.gerarLixo();
+        }
+        bucho = Coletavel.NENHUM;
+    }
+
+
+
+    private void andar(int novaPosicaoX, int novaPosicaoY) {
+        corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));
+        if(corpo.size() > tamanho) {
+            corpo.removeLast();
+        }
+    }
+
 }
