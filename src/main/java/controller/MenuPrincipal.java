@@ -6,16 +6,17 @@ import view.MenuPrincipalView;
 public class MenuPrincipal implements MenuPrincipalView.MenuListener {
     final private MenuPrincipalView menuPrincipal;
     final private Janela janelaPrincipal;
+    final private Jogo jogo;
 
     public MenuPrincipal() {
         this.menuPrincipal = new MenuPrincipalView(Carregar.getImagem("/menuInicial.png"));
-        this.janelaPrincipal = new Janela(this.menuPrincipal);
-        janelaPrincipal.setVisible(true);
-
+        this.jogo = new Jogo( this);
+        this.janelaPrincipal = new Janela(this.menuPrincipal, jogo.getTamanhoJogo());
     }
 
     public void iniciar() {
         this.menuPrincipal.setListener(this);
+        janelaPrincipal.setVisible(true);
     }
 
     public void voltarMenuPrincipal() {
@@ -24,8 +25,7 @@ public class MenuPrincipal implements MenuPrincipalView.MenuListener {
 
     @Override
     public void onJogar() {
-        Jogo j = new Jogo(janelaPrincipal, this);
-        j.iniciar();
+        jogo.iniciar(janelaPrincipal);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package controller;
 
 import model.*;
-
-import view.MenuPrincipalView;
 import view.JogoView;
 import view.Mapa;
 import view.Janela;
@@ -22,16 +20,20 @@ public class Jogo {
     private Timer loopJogo;
     private final MenuPrincipal menuController;
 
-    public Jogo(Janela janelaPrincipal, MenuPrincipal menuController) {
+    public Jogo( MenuPrincipal menuController) {
         tabuleiro = new Tabuleiro();
         cobrinha = new Cobrinha(tabuleiro);
-        this.janelaView = janelaPrincipal;
+        this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
+        this.jogoView = new JogoView(mapaView);
         this.menuController = menuController;
     }
 
-    public void iniciar() {
-        this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
-        this.jogoView = new JogoView(mapaView);
+    public Dimension getTamanhoJogo() {
+        return jogoView.getPreferredSize();
+    }
+
+    public void iniciar(Janela janelaPrincipal) {
+        this.janelaView = janelaPrincipal;
         janelaView.setConteudo(jogoView);
 
         iniciarMovimento();

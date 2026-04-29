@@ -2,14 +2,20 @@ package view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.*;
 
 public class Janela extends JFrame {
     private JPanel conteudo;
-    public Janela(JPanel painel) {
+    public Janela(JPanel painel, Dimension tamanhoJogo) {
         super("Cobrinha Gari");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 700);
         this.setConteudo(painel);
+
+        this.getContentPane().setPreferredSize(tamanhoJogo);
+
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public void setConteudo( JPanel novoPainel) {
