@@ -8,7 +8,7 @@ import java.util.List;
 public class Cobrinha {
     private Direcao direcao = Direcao.LESTE;
     private Coletavel bucho = Coletavel.NENHUM;
-    private int tamanho = 5; // Tamanho Inicial
+    private int tamanho = 2; // Tamanho Inicial
     private final List<Point> corpo;
     private final Tabuleiro tabuleiro;
     private boolean viva = true;
@@ -46,21 +46,22 @@ public class Cobrinha {
         return viva;
     }
 
-    public void crescer() {
-        tamanho++;
-    }
-
     public void tentarEngolir() {
         Point cabeca = corpo.getFirst();
         Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
 
         Coletavel coletavelNovo = espaco.getColetavel();
         if(bucho == Coletavel.NENHUM && coletavelNovo != Coletavel.NENHUM) {
-            if(coletavelNovo.ehLixo()) {
-                bucho = coletavelNovo;
-
+            bucho = coletavelNovo;
+            if(bucho == Coletavel.MACA) {
+                tamanho += 5;
+                bucho = Coletavel.NENHUM;
+            } else if(bucho == Coletavel.BOMBA) {
+                tamanho -= 5;
+                bucho = Coletavel.NENHUM;
             }
             espaco.setColetavel(Coletavel.NENHUM);
+
         }
     }
 
@@ -138,16 +139,16 @@ public class Cobrinha {
     private void entregarLixo(Espaco lixeira) {
         boolean entregaEstaCerta = lixeira.verificarSeAceitaEntrega(bucho);
 
-        if(entregaEstaCerta) {
-        } else {
-        }
+        if(entregaEstaCerta) tabuleiro.gerarColetavel(Coletavel.MACA); // Recompensa //
+        else tabuleiro.gerarColetavel(Coletavel.BOMBA); // Punição //
         bucho = Coletavel.NENHUM;
         tabuleiro.gerarLixo();
     }
 
     private void andar(int novaPosicaoX, int novaPosicaoY) {
         corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));
-        if(corpo.size() > tamanho) {
+        while(corpo.size() > tamanho) {
+            if(corpo.size() <= 2) return;
             corpo.removeLast();
         }
     }

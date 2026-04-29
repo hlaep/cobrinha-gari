@@ -4,4 +4,3 @@ void main() {
         MenuPrincipal menuController = new MenuPrincipal();
         menuController.iniciar();
 }
-

@@ -22,6 +22,4 @@ public class Janela extends JFrame {
         this.getContentPane().repaint();
         novoPainel.requestFocusInWindow();
     }
-
-
 }

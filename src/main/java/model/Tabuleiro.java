@@ -51,13 +51,16 @@ public class Tabuleiro {
         return ThreadLocalRandom.current().nextInt(0, max);
     }
 
-    public void gerarLixo() {
+    private Espaco sortearEspacoVazio() {
         Espaco espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
-
-        while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO) {
+        while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO || espacoSorteado.getColetavel() != Coletavel.NENHUM) {
             espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
         }
+        return espacoSorteado;
+    }
 
+    public void gerarLixo() {
+        Espaco espacoSorteado = sortearEspacoVazio();
         Coletavel[] lixos = Coletavel.getLixos();
         Coletavel lixoSorteado = lixos[aleatorizar(lixos.length)];
 
@@ -83,5 +86,10 @@ public class Tabuleiro {
 
             }
         }
+    }
+
+    public void gerarColetavel(Coletavel coletavel) {
+        Espaco espacoSorteado = sortearEspacoVazio();
+        espacoSorteado.setColetavel(coletavel);
     }
 }
