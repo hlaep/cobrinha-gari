@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 
+import view.MenuPrincipalView;
 import view.JogoView;
 import view.Mapa;
 import view.Janela;
@@ -19,15 +20,17 @@ public class Jogo {
     private Janela janelaView;
     private JogoView jogoView;
     private Timer loopJogo;
+    private final MenuPrincipal menuController;
 
-    public Jogo() {
+    public Jogo(Janela janelaPrincipal, MenuPrincipal menuController) {
         tabuleiro = new Tabuleiro();
         cobrinha = new Cobrinha(tabuleiro);
+        this.janelaView = janelaPrincipal;
+        this.menuController = menuController;
     }
 
-    public void iniciar(Janela janelaPrincipal ) {
+    public void iniciar() {
         this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
-        this.janelaView = janelaPrincipal;
         this.jogoView = new JogoView(mapaView);
         janelaView.setConteudo(jogoView);
 
@@ -64,9 +67,7 @@ public class Jogo {
             iniciarMovimento();
             tabuleiro.limparLixosMapa();
             tabuleiro.gerarLixo();
-        } else if (escolha == 1) {
-            // voltarMenuPrincipal();
-        }
+        } else if (escolha == 1) menuController.voltarMenuPrincipal(); // volta para o menu principal //
     }
 
     private void detectarTeclado() {

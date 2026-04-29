@@ -12,14 +12,16 @@ public class Janela extends JFrame {
         this.setConteudo(painel);
     }
 
-    public void setConteudo( JPanel painel) {
-        if (this.conteudo != null) {
-            this.remove(this.conteudo);
+    public void setConteudo( JPanel novoPainel) {
+        if (conteudo != null) {
+            this.remove(conteudo);
         }
-        this.conteudo = painel;
-        this.add(this.conteudo);
-
-        this.revalidate();
-        this.repaint();
+        conteudo = novoPainel;
+        this.getContentPane().add(conteudo);
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
+        novoPainel.requestFocusInWindow();
     }
+
+
 }
