@@ -2,9 +2,11 @@ package controller;
 
 import model.*;
 
+import view.MenuPrincipalView;
 import view.JogoView;
 import view.Mapa;
 import view.Janela;
+import view.MensagemFimDeJogo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,33 +17,61 @@ public class Jogo {
     private final Tabuleiro tabuleiro;
     private final Cobrinha cobrinha;
     private Mapa mapaView;
-    private Janela janela;
+    private Janela janelaView;
+    private JogoView jogoView;
+    private Timer loopJogo;
+    private final MenuPrincipal menuController;
 
-    public Jogo() {
+    public Jogo(Janela janelaPrincipal, MenuPrincipal menuController) {
         tabuleiro = new Tabuleiro();
         cobrinha = new Cobrinha(tabuleiro);
+        this.janelaView = janelaPrincipal;
+        this.menuController = menuController;
     }
 
-    public void iniciar(Janela janelaPrincipal ) {
+    public void iniciar() {
         this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
-        this.janela = janelaPrincipal;
-        janela.setConteudo(new JogoView(mapaView));
+        this.jogoView = new JogoView(mapaView);
+        janelaView.setConteudo(jogoView);
 
         iniciarMovimento();
         detectarTeclado();
     }
 
     public void iniciarMovimento() {
-        Timer timer = new Timer(150, _ -> {
-            cobrinha.tentarAndar(tabuleiro.getDIMENSAO());
+        loopJogo = new Timer(150, _ -> {
+            cobrinha.tentarAndar();
+
+            if(!cobrinha.estaViva()) {
+                pararJogo();
+                return;
+            }
+
             cobrinha.tentarEngolir();
             mapaView.repaint();
         });
-        timer.start();
+        loopJogo.start();
+    }
+
+    private void pararJogo() {
+        if(loopJogo != null) {
+            loopJogo.stop();
+        }
+
+        MensagemFimDeJogo telaFim = new MensagemFimDeJogo();
+        int escolha = telaFim.mostrar(cobrinha.getRazaoMorte(), janelaView);
+
+        if (escolha == 0) {
+            // Reiniciar jogo //
+            cobrinha.reiniciarEstado();
+            iniciarMovimento();
+            tabuleiro.limparLixosMapa();
+            tabuleiro.gerarLixo();
+        } else if (escolha == 1) menuController.voltarMenuPrincipal(); // volta para o menu principal //
     }
 
     private void detectarTeclado() {
-        janela.addKeyListener(new KeyAdapter() {
+        janelaView.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 for(Direcao d: Direcao.values()) {
@@ -53,8 +83,8 @@ public class Jogo {
             }
         });
 
-        janela.setFocusable(true);
-        janela.requestFocusInWindow();
+        janelaView.setFocusable(true);
+        janelaView.requestFocusInWindow();
     }
 
     private void tentarMudarDirecao(Direcao novaDirecao) {
@@ -64,7 +94,4 @@ public class Jogo {
             mapaView.repaint();
         }
     }
-
-
-
 }

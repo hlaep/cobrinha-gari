@@ -8,23 +8,30 @@ import java.util.List;
 public class Cobrinha {
     private Direcao direcao = Direcao.LESTE;
     private Coletavel bucho = Coletavel.NENHUM;
-    private int tamanho = 2; // Tamanho Inicial
+    private int tamanho = 5; // Tamanho Inicial
     private final List<Point> corpo;
     private final Tabuleiro tabuleiro;
+    private boolean viva = true;
+    private String razaoMorte;
 
     public Cobrinha(Tabuleiro tabuleiro) {
+        this.tabuleiro = tabuleiro;
         corpo = new ArrayList<>();
+        setCorpoInicial();
+    }
+
+    public void setCorpoInicial() {
+        corpo.clear();
         corpo.add(new Point(15,15));
         corpo.add(new Point(15,16));
-        this.tabuleiro = tabuleiro;
     }
 
     public List<Point> getCorpo() {
         return corpo;
     }
 
-    public void setTamanho(int n) {
-        tamanho = n;
+    public String getRazaoMorte() {
+        return razaoMorte;
     }
 
     public Direcao getDirecao() {
@@ -33,6 +40,10 @@ public class Cobrinha {
 
     public void setDirecao(Direcao direcao) {
         this.direcao = direcao;
+    }
+
+    public boolean estaViva() {
+        return viva;
     }
 
     public void crescer() {
@@ -53,7 +64,9 @@ public class Cobrinha {
         }
     }
 
-    public void tentarAndar(int limiteXYMapa) {
+    public void tentarAndar() {
+        if(!viva) return;
+
         int novaPosicaoX = corpo.getFirst().x;
         int novaPosicaoY = corpo.getFirst().y;
 
@@ -63,6 +76,8 @@ public class Cobrinha {
             case LESTE -> novaPosicaoX++;
             case OESTE -> novaPosicaoX--;
         }
+
+        int limiteXYMapa = tabuleiro.getDIMENSAO();
 
         // Nova posição teleporta para o outro lado se sair do mapa //
         if(estaFora(novaPosicaoX, limiteXYMapa)) novaPosicaoX = teleportar(novaPosicaoX, limiteXYMapa);
@@ -75,15 +90,22 @@ public class Cobrinha {
         Espaco espacoAtual = tabuleiro.getMapa()[pontoAtual.y][pontoAtual.x];
 
         if(colideComCorpo(proximoPonto) || colideComObjeto(proximoPonto)) {
-            // Colide e perde //
-
-        } else if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) {
-            entregarLixo(espacoAtual);
-            andar(novaPosicaoX, novaPosicaoY);
-        }else {
-            // Não colide com o corpo //
-            andar(novaPosicaoX, novaPosicaoY);
+            viva = false;
+            razaoMorte = "colisão";
+            return;
         }
+        if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) entregarLixo(espacoAtual);
+
+        andar(novaPosicaoX, novaPosicaoY);
+    }
+
+    public void reiniciarEstado() {
+        tamanho = 2;
+        bucho = Coletavel.NENHUM;
+        razaoMorte = null;
+        viva = true;
+        setDirecao(Direcao.LESTE);
+        setCorpoInicial();
     }
 
     private boolean estaFora(int valor, int maximo) {
@@ -117,17 +139,11 @@ public class Cobrinha {
         boolean entregaEstaCerta = lixeira.verificarSeAceitaEntrega(bucho);
 
         if(entregaEstaCerta) {
-            IO.println("Entregou certo.");
-            tabuleiro.gerarLixo();
-
         } else {
-            IO.println("Entregou errado.");
-            tabuleiro.gerarLixo();
         }
         bucho = Coletavel.NENHUM;
+        tabuleiro.gerarLixo();
     }
-
-
 
     private void andar(int novaPosicaoX, int novaPosicaoY) {
         corpo.addFirst(new Point(novaPosicaoX, novaPosicaoY));

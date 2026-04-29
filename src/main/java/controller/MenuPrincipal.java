@@ -1,13 +1,14 @@
 package controller;
 
 import view.Janela;
+import view.MenuPrincipalView;
 
-public class MenuPrincipal implements view.MenuPrincipal.MenuListener {
-    final private view.MenuPrincipal menuPrincipal;
+public class MenuPrincipal implements MenuPrincipalView.MenuListener {
+    final private MenuPrincipalView menuPrincipal;
     final private Janela janelaPrincipal;
 
     public MenuPrincipal() {
-        this.menuPrincipal = new view.MenuPrincipal(Carregar.getImagem("/menuInicial.png"));
+        this.menuPrincipal = new MenuPrincipalView(Carregar.getImagem("/menuInicial.png"));
         this.janelaPrincipal = new Janela(this.menuPrincipal);
         janelaPrincipal.setVisible(true);
 
@@ -17,11 +18,14 @@ public class MenuPrincipal implements view.MenuPrincipal.MenuListener {
         this.menuPrincipal.setListener(this);
     }
 
+    public void voltarMenuPrincipal() {
+        janelaPrincipal.setConteudo(menuPrincipal);
+    }
 
     @Override
     public void onJogar() {
-        Jogo j = new Jogo();
-        j.iniciar(janelaPrincipal);
+        Jogo j = new Jogo(janelaPrincipal, this);
+        j.iniciar();
     }
 
     @Override

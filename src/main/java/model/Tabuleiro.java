@@ -72,4 +72,16 @@ public class Tabuleiro {
     public int getDIMENSAO() {
         return DIMENSAO;
     }
+
+    public void limparLixosMapa() {
+        for(int i = 0; i < DIMENSAO; i++) {
+            for(int j = 0; j < DIMENSAO; j++) {
+
+                if(mapa[i][j].getTipo() == EspacoTipo.ESPACO_VAZIO) {
+                    mapa[i][j].setColetavel(Coletavel.NENHUM);
+                }
+
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@ import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.Image;
 
-public class MenuPrincipal extends PainelComFundo {
+public class MenuPrincipalView extends PainelComFundo {
     // Botões //
     public interface MenuListener {
         void onJogar();
@@ -45,7 +45,7 @@ public class MenuPrincipal extends PainelComFundo {
         }
     }
 
-    public MenuPrincipal(Image img) {
+    public MenuPrincipalView(Image img) {
         super(img);
         this.criarBotoes();
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
