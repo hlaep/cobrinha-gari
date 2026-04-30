@@ -45,7 +45,7 @@ public class Carregar {
     }
 
 
-    public static Map<String, Image> getArtes() {
+    public static Map<String, Image> getArtesMapa() {
         Map<String, Image> artes = new HashMap<>();
 
         EspacoTipo[] espacoTipos = EspacoTipo.values();

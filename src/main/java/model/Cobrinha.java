@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cobrinha {
-    private Direcao direcao = Direcao.LESTE;
-    private Coletavel bucho = Coletavel.NENHUM;
     private int tamanho = 2; // Tamanho Inicial
+    private Coletavel bucho = Coletavel.NENHUM;
     private final List<Point> corpo;
-    private final Tabuleiro tabuleiro;
+    private int pv = 3;
     private boolean viva = true;
+    private Direcao direcao = Direcao.LESTE;
     private String razaoMorte;
+
+    private final Tabuleiro tabuleiro;
 
     public Cobrinha(Tabuleiro tabuleiro) {
         this.tabuleiro = tabuleiro;
@@ -42,8 +44,17 @@ public class Cobrinha {
         this.direcao = direcao;
     }
 
+    public int getPV() {
+        return pv;
+    }
+
     public boolean estaViva() {
         return viva;
+    }
+
+    public void morrer(String razaoMorte) {
+        viva = false;
+        this.razaoMorte = razaoMorte;
     }
 
     public void tentarEngolir() {
@@ -57,7 +68,8 @@ public class Cobrinha {
                 tamanho += 5;
                 bucho = Coletavel.NENHUM;
             } else if(bucho == Coletavel.BOMBA) {
-                tamanho -= 5;
+                pv--;
+                if (pv <= 0) morrer("não resistir a explosão");
                 bucho = Coletavel.NENHUM;
             }
             espaco.setColetavel(Coletavel.NENHUM);
@@ -86,14 +98,17 @@ public class Cobrinha {
 
         Point proximoPonto = new Point(novaPosicaoX, novaPosicaoY);
 
-        // Informações necessárias para ehPontoDeEntrega() e entregarLixo() //
+        // Informações necessárias para ehPontoDeEntrega(), entregarLixo() e colideComObjeto() //
         Point pontoAtual = corpo.getFirst();
         Espaco espacoAtual = tabuleiro.getMapa()[pontoAtual.y][pontoAtual.x];
+        Espaco espacoAFrente = tabuleiro.getMapa()[proximoPonto.y][proximoPonto.x];
 
-        if(colideComCorpo(proximoPonto) || colideComObjeto(proximoPonto)) {
-            viva = false;
-            razaoMorte = "colisão";
+        if(colideComCorpo(proximoPonto)) {
+            morrer("tentar engolir a si mesma");
             return;
+        }
+        if(colideComObjeto(espacoAFrente)) {
+            morrer("tentar engolir " + espacoAFrente.getTipo().toString().toLowerCase());
         }
         if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) entregarLixo(espacoAtual);
 
@@ -105,6 +120,7 @@ public class Cobrinha {
         bucho = Coletavel.NENHUM;
         razaoMorte = null;
         viva = true;
+        pv = 3;
         setDirecao(Direcao.LESTE);
         setCorpoInicial();
     }
@@ -127,8 +143,7 @@ public class Cobrinha {
         return false;
     }
 
-    private boolean colideComObjeto(Point proximoPonto) {
-        Espaco espacoAFrente = tabuleiro.getMapa()[proximoPonto.y][proximoPonto.x];
+    private boolean colideComObjeto(Espaco espacoAFrente) {
         return espacoAFrente.getTipo().ehIntransitavel();
     }
 
