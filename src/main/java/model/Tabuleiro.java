@@ -53,10 +53,16 @@ public class Tabuleiro {
 
     private Espaco sortearEspacoVazio() {
         Espaco espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
-        while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO || espacoSorteado.getColetavel() != Coletavel.NENHUM) {
-            espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
-        }
+        while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO || espacoSorteado.getColetavel() != Coletavel.NENHUM) espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
+
         return espacoSorteado;
+    }
+
+    private boolean ehEspacoVazioSemColetavel(EspacoTipo tipo) {
+        return (
+                tipo != EspacoTipo.ESPACO_VAZIO &&
+
+                );
     }
 
     public void gerarLixo() {

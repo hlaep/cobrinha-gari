@@ -17,6 +17,7 @@ public class Jogo {
     private final JogoView jogoView;
     private Timer loopJogo;
     private final MenuPrincipal menuController;
+    private Direcao direcaoUltimoPasso;
 
     public Jogo( MenuPrincipal menuController) {
         tabuleiro = new Tabuleiro();
@@ -25,10 +26,6 @@ public class Jogo {
         this.cobrinhaPV_View = new PV(cobrinha);
         this.jogoView = new JogoView(mapaView, cobrinhaPV_View);
         this.menuController = menuController;
-    }
-
-    public Dimension getTamanhoJogo() {
-        return jogoView.getPreferredSize();
     }
 
     public void iniciar(Janela janelaPrincipal) {
@@ -40,9 +37,11 @@ public class Jogo {
     }
 
     public void iniciarMovimento() {
-        loopJogo = new Timer(150, _ -> {
+        direcaoUltimoPasso = cobrinha.getDirecao();
+        loopJogo = new Timer(200, _ -> {
             int pvAntes = cobrinha.getPV();
             cobrinha.tentarAndar();
+            direcaoUltimoPasso = cobrinha.getDirecao();
 
             if(!cobrinha.estaViva()) {
                 pararJogo();
@@ -81,9 +80,9 @@ public class Jogo {
         janelaView.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                for(Direcao d: Direcao.values()) {
-                    if(e.getKeyCode() == d.getKeyCode()) {
-                        tentarMudarDirecao(d);
+                for(Direcao novaDirecao: Direcao.values()) {
+                    if(e.getKeyCode() == novaDirecao.getKeyCode()) {
+                        tentarMudarDirecao(novaDirecao);
                         break;
                     }
                 }
@@ -95,8 +94,7 @@ public class Jogo {
     }
 
     private void tentarMudarDirecao(Direcao novaDirecao) {
-        Direcao atual = cobrinha.getDirecao();
-        if (!atual.ehOposta(novaDirecao)) {
+        if (!direcaoUltimoPasso.ehOposta(novaDirecao)) {
             cobrinha.setDirecao(novaDirecao);
             mapaView.repaint();
         }
