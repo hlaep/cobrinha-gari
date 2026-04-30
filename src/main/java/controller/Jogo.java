@@ -1,10 +1,7 @@
 package controller;
 
 import model.*;
-import view.JogoView;
-import view.Mapa;
-import view.Janela;
-import view.MensagemFimDeJogo;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,17 +11,19 @@ import java.awt.event.KeyEvent;
 public class Jogo {
     private final Tabuleiro tabuleiro;
     private final Cobrinha cobrinha;
-    private Mapa mapaView;
+    private final PV cobrinhaPV_View;
+    private final Mapa mapaView;
     private Janela janelaView;
-    private JogoView jogoView;
+    private final JogoView jogoView;
     private Timer loopJogo;
     private final MenuPrincipal menuController;
 
     public Jogo( MenuPrincipal menuController) {
         tabuleiro = new Tabuleiro();
         cobrinha = new Cobrinha(tabuleiro);
-        this.mapaView = new Mapa(Carregar.getArtes(), tabuleiro.getMapa(), cobrinha);
-        this.jogoView = new JogoView(mapaView);
+        this.mapaView = new Mapa(Carregar.getArtesMapa(), tabuleiro.getMapa(), cobrinha);
+        this.cobrinhaPV_View = new PV(cobrinha);
+        this.jogoView = new JogoView(mapaView, cobrinhaPV_View);
         this.menuController = menuController;
     }
 
@@ -42,6 +41,7 @@ public class Jogo {
 
     public void iniciarMovimento() {
         loopJogo = new Timer(150, _ -> {
+            int pvAntes = cobrinha.getPV();
             cobrinha.tentarAndar();
 
             if(!cobrinha.estaViva()) {
@@ -51,6 +51,11 @@ public class Jogo {
 
             cobrinha.tentarEngolir();
             mapaView.repaint();
+
+            if(pvAntes > cobrinha.getPV()) {
+                cobrinhaPV_View.revalidate();
+                cobrinhaPV_View.repaint();
+            }
         });
         loopJogo.start();
     }

@@ -44,6 +44,10 @@ public class Cobrinha {
         this.direcao = direcao;
     }
 
+    public int getPV() {
+        return pv;
+    }
+
     public boolean estaViva() {
         return viva;
     }
@@ -116,6 +120,7 @@ public class Cobrinha {
         bucho = Coletavel.NENHUM;
         razaoMorte = null;
         viva = true;
+        pv = 3;
         setDirecao(Direcao.LESTE);
         setCorpoInicial();
     }
