@@ -4,9 +4,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 
 public class JogoView extends JPanel {
-    private Mapa mapa;
-    private final int ESPACO_ADICIONAL_H = 200; // Espaço para um menu lateral, por exemplo
-    private final int ESPACO_ADICIONAL_V = 50;  // Espaço para um HUD superior
+    private final Mapa mapa;
 
     public JogoView(Mapa mapa) {
         this.mapa = mapa;
@@ -17,13 +15,12 @@ public class JogoView extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        // Pega o tamanho ideal do mapa
         Dimension dimMapa = mapa.getPreferredSize();
 
-        // Retorna o tamanho do mapa + seus cálculos customizados
+        // Retorna o tamanho do mapa + seus cálculos customizados quando precisar //
         return new Dimension(
-                dimMapa.width + ESPACO_ADICIONAL_H,
-                dimMapa.height + ESPACO_ADICIONAL_V
+                dimMapa.width,
+                dimMapa.height
         );
     }
 }
