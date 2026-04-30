@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Image;
 
 public class MenuPrincipalView extends PainelComFundo {
-    // Botões //
     public interface MenuListener {
         void onJogar();
         void onClassificacao();
@@ -27,15 +26,7 @@ public class MenuPrincipalView extends PainelComFundo {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(Box.createVerticalGlue());
 
-        JButton jogar = new JButton("jogar");
-        JButton classificacao = new JButton("Classificação");
-        JButton configuracoes = new JButton("Configurações");
-
-        jogar.addActionListener(e -> { if(listener != null) { listener.onJogar(); }});
-        classificacao.addActionListener(e -> { if(listener != null) { listener.onClassificacao(); }});
-        configuracoes.addActionListener(e -> { if(listener != null) { listener.onConfiguracoes(); }});
-
-        JButton[] botoes = { jogar, classificacao, configuracoes };
+        JButton[] botoes = getBotoes();
 
         for(JButton b : botoes) {
             b.setMaximumSize(new Dimension(150, 40));
@@ -45,8 +36,21 @@ public class MenuPrincipalView extends PainelComFundo {
         }
     }
 
+    private JButton[] getBotoes() {
+        JButton jogar = new JButton("jogar");
+        JButton classificacao = new JButton("Classificação");
+        JButton configuracoes = new JButton("Configurações");
+
+        jogar.addActionListener(_ -> { if(listener != null) { listener.onJogar(); }});
+        classificacao.addActionListener(_ -> { if(listener != null) { listener.onClassificacao(); }});
+        configuracoes.addActionListener(_ -> { if(listener != null) { listener.onConfiguracoes(); }});
+
+        return new JButton[] { jogar, classificacao, configuracoes };
+    }
+
     public MenuPrincipalView(Image img) {
         super(img);
+        this.setPreferredSize(Configuracoes.getTamanhoJanela());
         this.criarBotoes();
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
