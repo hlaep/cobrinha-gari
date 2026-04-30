@@ -6,12 +6,10 @@ import view.MenuPrincipalView;
 public class MenuPrincipal implements MenuPrincipalView.MenuListener {
     final private MenuPrincipalView menuPrincipal;
     final private Janela janelaPrincipal;
-    final private Jogo jogo;
 
     public MenuPrincipal() {
         this.menuPrincipal = new MenuPrincipalView(Carregar.getImagem("/menuInicial.png"));
-        this.jogo = new Jogo( this);
-        this.janelaPrincipal = new Janela(this.menuPrincipal, jogo.getTamanhoJogo());
+        this.janelaPrincipal = new Janela(this.menuPrincipal);
     }
 
     public void iniciar() {
@@ -25,7 +23,8 @@ public class MenuPrincipal implements MenuPrincipalView.MenuListener {
 
     @Override
     public void onJogar() {
-        jogo.iniciar(janelaPrincipal);
+        Jogo j = new Jogo(this);
+        j.iniciar(janelaPrincipal);
     }
 
     @Override
