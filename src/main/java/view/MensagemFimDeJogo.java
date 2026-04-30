@@ -9,7 +9,7 @@ public class MensagemFimDeJogo {
     public int mostrar(String razaoMorte, JFrame janelaMae) {
         return JOptionPane.showOptionDialog(
                 janelaMae,
-                "Você morreu por " + razaoMorte + "!",
+                "A cobrinha morreu por " + razaoMorte + "!",
                 "Fim de Jogo",
                 JOptionPane.DEFAULT_OPTION, // Use default para tratar os botões do array
                 JOptionPane.INFORMATION_MESSAGE,
