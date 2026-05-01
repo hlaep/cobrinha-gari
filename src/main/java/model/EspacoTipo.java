@@ -28,6 +28,10 @@ public enum EspacoTipo {
         return new EspacoTipo[] {LIXEIRA_METAL, LIXEIRA_PAPEL, LIXEIRA_PLASTICO, LIXEIRA_VIDRO, LIXEIRA_ORGANICO};
     }
 
+    public boolean ehLixeira() {
+        return this == LIXEIRA_METAL || this == LIXEIRA_ORGANICO || this == LIXEIRA_PAPEL || this == LIXEIRA_PLASTICO || this == LIXEIRA_VIDRO;
+    }
+
     public Coletavel getColetavelEquivalente() {
         return switch(this) {
             case LIXEIRA_METAL -> Coletavel.LIXO_METAL;

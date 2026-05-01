@@ -13,6 +13,7 @@ public class PV extends JPanel{
     public PV(Cobrinha cobrinha) {
         this.cobrinha = cobrinha;
         setPreferredSize(new Dimension(cobrinha.getPV() * 35, Configuracoes.alturaPVDisplay));
+        this.setBackground(Color.decode("#f2f7f2"));
     }
 
     @Override

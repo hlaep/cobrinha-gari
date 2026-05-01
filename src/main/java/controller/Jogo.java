@@ -32,13 +32,14 @@ public class Jogo {
         this.janelaView = janelaPrincipal;
         janelaView.setConteudo(jogoView);
 
+        tabuleiro.gerarLixo(cobrinha.getCorpo());
         iniciarMovimento();
         detectarTeclado();
     }
 
     public void iniciarMovimento() {
         direcaoUltimoPasso = cobrinha.getDirecao();
-        loopJogo = new Timer(200, _ -> {
+        loopJogo = new Timer(140, _ -> {
             int pvAntes = cobrinha.getPV();
             cobrinha.tentarAndar();
             direcaoUltimoPasso = cobrinha.getDirecao();
@@ -72,8 +73,8 @@ public class Jogo {
             cobrinha.reiniciarEstado();
             iniciarMovimento();
             tabuleiro.limparLixosMapa();
-            tabuleiro.gerarLixo();
-        } else if (escolha == 1) menuController.voltarMenuPrincipal(); // volta para o menu principal //
+            tabuleiro.gerarLixo(cobrinha.getCorpo());
+        } else if (escolha == 1 || escolha == -1) menuController.voltarMenuPrincipal(); // volta para o menu principal //
     }
 
     private void detectarTeclado() {

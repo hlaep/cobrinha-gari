@@ -28,6 +28,6 @@ public class JogoView extends JPanel {
         gbc.weighty = 0.9; // Ocupa espaço vertical
         this.add(mapa, gbc);
 
-        this.setBackground(Color.LIGHT_GRAY);
+        this.setBackground(Color.decode("#f2f7f2"));
     }
 }

@@ -1,6 +1,9 @@
 package model;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
 public class Tabuleiro {
     private final int DIMENSAO = 30;
@@ -21,13 +24,12 @@ public class Tabuleiro {
             }
         }
         renderizarColunaLixeiras();
-        gerarLixo();
     }
 
     private void renderizarColunaLixeiras() {
         int colunaCoordenada = DIMENSAO - 1; // Última //
         for(int i = 1; i < DIMENSAO - 1; i++) {
-            // Preenche com arbusto entre a sengunda e a penúltima (dimensão - 1) //
+            // Preenche com arbusto entre a segunda e a penúltima (dimensão - 1) //
             mapa[i][colunaCoordenada] = new Espaco(EspacoTipo.ARBUSTO);
         }
 
@@ -51,22 +53,31 @@ public class Tabuleiro {
         return ThreadLocalRandom.current().nextInt(0, max);
     }
 
-    private Espaco sortearEspacoVazio() {
-        Espaco espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
-        while(espacoSorteado.getTipo() != EspacoTipo.ESPACO_VAZIO || espacoSorteado.getColetavel() != Coletavel.NENHUM) espacoSorteado = mapa[aleatorizar(DIMENSAO)][aleatorizar(DIMENSAO)];
+    private Espaco sortearEspacoVazio(List<Point> corpoCobrinha) {
+        List<Point> espacosDisponiveis = new ArrayList<>();
 
-        return espacoSorteado;
+        for(int i = 0; i < DIMENSAO; i++) {
+            for(int j = 0; j < DIMENSAO; j++) {
+                if(podeGerarColetavel(i, j, corpoCobrinha)) {
+                    espacosDisponiveis.add(new Point(i, j));
+                }
+            }
+        }
+
+        Point sorteado = espacosDisponiveis.get(aleatorizar(espacosDisponiveis.size()));
+        return mapa[sorteado.y][sorteado.x];
     }
 
-    private boolean ehEspacoVazioSemColetavel(EspacoTipo tipo) {
-        return (
-                tipo != EspacoTipo.ESPACO_VAZIO &&
-
-                );
+    private boolean podeGerarColetavel(int x, int y, List<Point> corpoCobrinha) {
+        Espaco espaco = mapa[y][x];
+        for(Point parteCorpo: corpoCobrinha) {
+            if(parteCorpo.x == x && parteCorpo.y == y) return false;
+        }
+        return espaco.getTipo() == EspacoTipo.ESPACO_VAZIO && espaco.getColetavel() == Coletavel.NENHUM;
     }
 
-    public void gerarLixo() {
-        Espaco espacoSorteado = sortearEspacoVazio();
+    public void gerarLixo(List<Point> corpoCobrinha) {
+        Espaco espacoSorteado = sortearEspacoVazio(corpoCobrinha);
         Coletavel[] lixos = Coletavel.getLixos();
         Coletavel lixoSorteado = lixos[aleatorizar(lixos.length)];
 
@@ -94,8 +105,8 @@ public class Tabuleiro {
         }
     }
 
-    public void gerarColetavel(Coletavel coletavel) {
-        Espaco espacoSorteado = sortearEspacoVazio();
+    public void gerarColetavel(Coletavel coletavel, List<Point> corpoCobrinha) {
+        Espaco espacoSorteado = sortearEspacoVazio(corpoCobrinha);
         espacoSorteado.setColetavel(coletavel);
     }
 }

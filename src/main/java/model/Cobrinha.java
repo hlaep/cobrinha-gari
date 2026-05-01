@@ -108,7 +108,10 @@ public class Cobrinha {
             return;
         }
         if(colideComObjeto(espacoAFrente)) {
-            morrer("tentar engolir " + espacoAFrente.getTipo().toString().toLowerCase());
+            String objetoAFrente;
+            if(espacoAFrente.getTipo().ehLixeira()) objetoAFrente = "lixeira";
+            else objetoAFrente =espacoAFrente.getTipo().toString().toLowerCase();
+            morrer("tentar engolir " + objetoAFrente);
         }
         if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) entregarLixo(espacoAtual);
 
@@ -154,10 +157,10 @@ public class Cobrinha {
     private void entregarLixo(Espaco lixeira) {
         boolean entregaEstaCerta = lixeira.verificarSeAceitaEntrega(bucho);
 
-        if(entregaEstaCerta) tabuleiro.gerarColetavel(Coletavel.MACA); // Recompensa //
-        else tabuleiro.gerarColetavel(Coletavel.BOMBA); // Punição //
+        if(entregaEstaCerta) tabuleiro.gerarColetavel(Coletavel.MACA, corpo); // Recompensa //
+        else tabuleiro.gerarColetavel(Coletavel.BOMBA, corpo); // Punição //
         bucho = Coletavel.NENHUM;
-        tabuleiro.gerarLixo();
+        tabuleiro.gerarLixo(corpo);
     }
 
     private void andar(int novaPosicaoX, int novaPosicaoY) {
