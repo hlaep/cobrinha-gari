@@ -34,6 +34,8 @@ public enum Direcao {
         return imagens.get("rabo " + this.getNome());
     }
 
+
+
     /* Método para evitar que a cobra volte sobre o próprio corpo */
     public boolean ehOposta(Direcao outra) {
         return (this == NORTE && outra == SUL) ||
