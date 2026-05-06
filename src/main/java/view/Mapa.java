@@ -1,15 +1,17 @@
 package view;
 
+import controller.Carregar;
 import model.Coletavel;
 import model.Espaco;
 import model.Cobrinha;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JPanel;
+import java.util.List;
 import java.util.Map;
+
+import static view.Configuracoes.ESPACO_TAMANHO;
 
 public class Mapa extends JPanel {
     private final Espaco[][] mapa;
@@ -28,7 +30,7 @@ public class Mapa extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int espacoTamanho = Configuracoes.ESPACO_TAMANHO;
+        int espacoTamanho = ESPACO_TAMANHO;
 
         for(int i = 0; i < mapa.length; i++) {
             for(int j = 0; j < mapa[i].length; j++) {
@@ -60,32 +62,20 @@ public class Mapa extends JPanel {
             }
         }
 
-        g.setColor(java.awt.Color.GREEN);
-        for(Point p: cobrinha.getCorpo()) {
-            g.fillRect(
-                    p.x * espacoTamanho,
-                    p.y * espacoTamanho,
-                    espacoTamanho,
-                    espacoTamanho
-            );
-        }
-
-       /* Direcao direcaoAtual = cobrinha.getDirecao();
         List<Point> corpo = cobrinha.getCorpo();
+        // Pega as keys para selecionar a imagem em imagens, assim não precisa carregar imagens todos os frames //
+        List<String> corpoKeys = Carregar.getKeyArteCorpoCobrinha(corpo, cobrinha.getDirecao());
 
         for(int i = 0; i < corpo.size(); i++) {
-            Image img;
-            Point ponto = corpo.get(i);
-            if(i == 0) img = direcaoAtual.getArteCabeca(imagens);
-             else if (i == corpo.size() - 1) img = direcaoAtual.getArteRabo(imagens);
-             else img = direcaoAtual.getArteCorpo(imagens);
-
-             g.drawImage(img, ponto.x * ESPACO_TAMANHO,
-                     ponto.y * ESPACO_TAMANHO,
-                     ESPACO_TAMANHO,
-                     ESPACO_TAMANHO,
-                     this
-             );
-        }*/
+            Image img = imagens.get(corpoKeys.get(i));
+            g.drawImage(
+                    img,
+                    corpo.get(i).x * espacoTamanho,
+                    corpo.get(i).y * espacoTamanho,
+                    espacoTamanho,
+                    espacoTamanho,
+                    this
+            );
+        }
     }
 }
