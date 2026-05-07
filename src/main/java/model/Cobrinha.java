@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cobrinha {
-    private int tamanho = 7; // Tamanho Inicial
+    private int tamanho = 3; // Tamanho Inicial
     private Coletavel bucho = Coletavel.NENHUM;
     private final List<Point> corpo;
     private int pv = 3;

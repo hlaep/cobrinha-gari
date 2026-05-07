@@ -6,11 +6,11 @@ import model.Cobrinha;
 import java.awt.*;
 import javax.swing.JPanel;
 
-public class PV extends JPanel{
+public class pvView extends JPanel{
     private final Cobrinha cobrinha;
     private final Image coracaoImg = Carregar.getImagem("/coracao.png");
 
-    public PV(Cobrinha cobrinha) {
+    public pvView(Cobrinha cobrinha) {
         this.cobrinha = cobrinha;
         setPreferredSize(new Dimension(cobrinha.getPV() * 35, Configuracoes.alturaPVDisplay));
         this.setBackground(Color.decode("#f2f7f2"));

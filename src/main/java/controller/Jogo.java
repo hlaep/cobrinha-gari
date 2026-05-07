@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 public class Jogo {
     private final Tabuleiro tabuleiro;
     private final Cobrinha cobrinha;
-    private final PV cobrinhaPV_View;
+    private final pvView cobrinhaPV_View;
     private final Mapa mapaView;
     private Janela janelaView;
     private final JogoView jogoView;
@@ -23,7 +23,7 @@ public class Jogo {
         tabuleiro = new Tabuleiro();
         cobrinha = new Cobrinha(tabuleiro);
         this.mapaView = new Mapa(Carregar.getArtesMapa(), tabuleiro.getMapa(), cobrinha);
-        this.cobrinhaPV_View = new PV(cobrinha);
+        this.cobrinhaPV_View = new pvView(cobrinha);
         this.jogoView = new JogoView(mapaView, cobrinhaPV_View);
         this.menuController = menuController;
     }
@@ -52,6 +52,8 @@ public class Jogo {
             mapaView.repaint();
 
             if(pvAntes > cobrinha.getPV()) {
+                Point cabeca = cobrinha.getCorpo().getFirst();
+                mapaView.adicionarExplosao(new Point(cabeca.x, cabeca.y));
                 cobrinhaPV_View.revalidate();
                 cobrinhaPV_View.repaint();
             }
