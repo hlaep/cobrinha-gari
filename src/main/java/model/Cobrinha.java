@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cobrinha {
-    private int tamanho = 7; // Tamanho Inicial
+    private int tamanho = 3; // Tamanho Inicial
     private Coletavel bucho = Coletavel.NENHUM;
     private final List<Point> corpo;
     private int pv = 3;
@@ -22,12 +22,6 @@ public class Cobrinha {
         setCorpoInicial();
     }
 
-    public void setCorpoInicial() {
-        corpo.clear();
-        corpo.add(new Point(15,15));
-        corpo.add(new Point(15,16));
-    }
-
     public List<Point> getCorpo() {
         return corpo;
     }
@@ -40,10 +34,6 @@ public class Cobrinha {
         return direcao;
     }
 
-    public void setDirecao(Direcao direcao) {
-        this.direcao = direcao;
-    }
-
     public int getPV() {
         return pv;
     }
@@ -52,29 +42,29 @@ public class Cobrinha {
         return viva;
     }
 
+    public void setCorpoInicial() {
+        corpo.clear();
+        corpo.add(new Point(15,15));
+        corpo.add(new Point(15,16));
+    }
+
+    public void setDirecao(Direcao direcao) {
+        this.direcao = direcao;
+    }
+
+    public void reiniciarEstado() {
+        tamanho = 3;
+        bucho = Coletavel.NENHUM;
+        razaoMorte = null;
+        viva = true;
+        pv = 3;
+        setDirecao(Direcao.LESTE);
+        setCorpoInicial();
+    }
+
     public void morrer(String razaoMorte) {
         viva = false;
         this.razaoMorte = razaoMorte;
-    }
-
-    public void tentarEngolir() {
-        Point cabeca = corpo.getFirst();
-        Espaco espaco = tabuleiro.getMapa()[cabeca.y][cabeca.x];
-
-        Coletavel coletavelNovo = espaco.getColetavel();
-        if(bucho == Coletavel.NENHUM && coletavelNovo != Coletavel.NENHUM) {
-            bucho = coletavelNovo;
-            if(bucho == Coletavel.MACA) {
-                tamanho += 5;
-                bucho = Coletavel.NENHUM;
-            } else if(bucho == Coletavel.BOMBA) {
-                pv--;
-                if (pv <= 0) morrer("não resistir a explosão");
-                bucho = Coletavel.NENHUM;
-            }
-            espaco.setColetavel(Coletavel.NENHUM);
-
-        }
     }
 
     public void tentarAndar() {
@@ -98,10 +88,12 @@ public class Cobrinha {
 
         Point proximoPonto = new Point(novaPosicaoX, novaPosicaoY);
 
-        // Informações necessárias para ehPontoDeEntrega(), entregarLixo() e colideComObjeto() //
+        // Informações necessárias para ehPontoDeEntrega(), entregarLixo(), colideComObjeto() e tentarEngolir() //
         Point pontoAtual = corpo.getFirst();
         Espaco espacoAtual = tabuleiro.getMapa()[pontoAtual.y][pontoAtual.x];
         Espaco espacoAFrente = tabuleiro.getMapa()[proximoPonto.y][proximoPonto.x];
+
+        tentarEngolir(espacoAtual);
 
         if(colideComCorpo(proximoPonto)) {
             morrer("tentar engolir a si mesma");
@@ -110,22 +102,13 @@ public class Cobrinha {
         if(colideComObjeto(espacoAFrente)) {
             String objetoAFrente;
             if(espacoAFrente.getTipo().ehLixeira()) objetoAFrente = "lixeira";
-            else objetoAFrente =espacoAFrente.getTipo().toString().toLowerCase();
+            else objetoAFrente = espacoAFrente.getTipo().toString().toLowerCase();
             morrer("tentar engolir " + objetoAFrente);
         }
+
         if(ehPontoDeEntrega(espacoAtual) && bucho != Coletavel.NENHUM) entregarLixo(espacoAtual);
 
         andar(novaPosicaoX, novaPosicaoY);
-    }
-
-    public void reiniciarEstado() {
-        tamanho = 3;
-        bucho = Coletavel.NENHUM;
-        razaoMorte = null;
-        viva = true;
-        pv = 3;
-        setDirecao(Direcao.LESTE);
-        setCorpoInicial();
     }
 
     private boolean estaFora(int valor, int maximo) {
@@ -135,6 +118,29 @@ public class Cobrinha {
     private int teleportar(int valor, int maximo) {
         if(valor < 0) return maximo - 1;
         else return 0;
+    }
+
+    public void tentarEngolir(Espaco espacoAtual) {
+        Coletavel coletavelNovo = espacoAtual.getColetavel();
+
+        // Engolir lixo //
+        if(bucho == Coletavel.NENHUM && coletavelNovo.ehLixo()) {
+            bucho = coletavelNovo;
+            espacoAtual.setColetavel(Coletavel.NENHUM);
+        }
+        // Aplicar efeito de coletável especial (não precisa engolir) //
+        if(coletavelNovo == Coletavel.MACA) {
+            tamanho++;
+            espacoAtual.setColetavel(Coletavel.NENHUM);
+        }
+        if(coletavelNovo == Coletavel.BOMBA) {
+            pv--;
+            if(pv <= 0) {
+                viva = false;
+                morrer("não resistir a explosão");
+            }
+            espacoAtual.setColetavel(Coletavel.NENHUM);
+        }
     }
 
     private boolean colideComCorpo(Point proximoPonto) {

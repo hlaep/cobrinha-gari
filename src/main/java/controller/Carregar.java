@@ -37,6 +37,7 @@ public class Carregar {
             artes.put(chave, getImagem("/" + chave + ".png"));
         }
 
+        artes.put("explosão", getImagem("/explosao.png"));
         artes.put("lixo metal", getImagem("/lixo-metal.png"));
         artes.put("lixo orgânico", getImagem("/lixo-organico.png"));
         artes.put("lixo papel", getImagem("/lixo-papel.png"));

@@ -4,12 +4,8 @@ import javax.swing.JPanel;
 import java.awt.*;
 
 public class JogoView extends JPanel {
-    private final JPanel mapa, pvDisplay;
-
-    public JogoView(Mapa mapa, PV pvDisplay) {
+    public JogoView(Mapa mapa, pvView pv) {
         this.setPreferredSize(Configuracoes.getTamanhoJanela());
-        this.pvDisplay = pvDisplay;
-        this.mapa = mapa;
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -21,7 +17,7 @@ public class JogoView extends JPanel {
         // PV Display na linha 0 (Topo)
         gbc.gridy = 0;
         gbc.weighty = 0.1; // Ocupa menos espaço vertical
-        this.add(pvDisplay, gbc);
+        this.add(pv, gbc);
 
         // Mapa na linha 1 (Abaixo)
         gbc.gridy = 1;
