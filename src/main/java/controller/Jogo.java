@@ -49,7 +49,6 @@ public class Jogo {
                 return;
             }
 
-            cobrinha.tentarEngolir();
             mapaView.repaint();
 
             if(pvAntes > cobrinha.getPV()) {
